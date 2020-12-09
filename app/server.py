@@ -6,7 +6,7 @@ from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
 
-app.mount("/embedded", StaticFiles(directory="embedded"), name="embedded")
+app.mount("/embedded", StaticFiles(directory="app/embedded/dist/embedded"), name="embedded")
 
 @app.get("/")
 def read_root():
