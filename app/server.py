@@ -2,8 +2,11 @@ from typing import Optional
 
 from fastapi import FastAPI
 
+from fastapi.staticfiles import StaticFiles
+
 app = FastAPI()
 
+app.mount("/embedded", StaticFiles(directory="embedded"), name="embedded")
 
 @app.get("/")
 def read_root():
