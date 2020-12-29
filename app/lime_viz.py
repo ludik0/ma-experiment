@@ -1,5 +1,8 @@
+import lime
 import lime.lime_tabular
 import sklearn
+import sklearn.datasets
+import sklearn.ensemble
 import numpy as np
 import re
 import uuid
