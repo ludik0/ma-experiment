@@ -1,4 +1,6 @@
-FROM python:3.7
+#FROM python:3.7
+FROM continuumio/anaconda3:2020.11
+RUN apt install graphviz
 
 COPY ./requirements.txt /requirements.txt
 

@@ -1,6 +1,5 @@
 from sklearn.datasets import load_iris
 import re
-import pydotplus as pydot  # pydot library: install it via pip install pydot
 import uuid
 from subprocess import call
 import os
@@ -11,7 +10,7 @@ from sklearn.tree import export_graphviz
 def show_rule_vis():
     
     Path("./tmp").mkdir(parents=True, exist_ok=True)
-    
+
     iris = load_iris()
 
     # Model (can also use single decision tree)
