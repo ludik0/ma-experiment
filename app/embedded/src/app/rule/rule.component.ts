@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import graphlibDot from 'graphlib-dot';
+/*import graphlibDot from 'graphlib-dot';
 import dagreD3 from 'dagre-d3';
 import * as d3 from 'd3';
 import { graphviz }  from 'd3-graphviz';
-import { wasmFolder } from "@hpcc-js/wasm";
+import { wasmFolder } from "@hpcc-js/wasm";*/
 
 @Component({
   selector: 'app-rule',
