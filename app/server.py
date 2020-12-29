@@ -3,14 +3,22 @@ from typing import Optional
 from fastapi import FastAPI
 
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+
+from .rule import show_rule_vis
 
 app = FastAPI()
 
-app.mount("/embedded", StaticFiles(directory="app/embedded/dist/embedded"), name="embedded")
+app.mount("/embedded", StaticFiles(directory="app/embedded/dist/embedded",html =True), name="embedded")
 
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
+
+@app.get("/rule")
+def read_root():
+    return FileResponse(show_rule_vis())
+
 
 
 @app.get("/items/{item_id}")
