@@ -6,7 +6,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 
 from .rule import show_rule_vis
-from .lime import get_lime_vis
+from .lime_viz import get_lime_vis
 
 app = FastAPI()
 

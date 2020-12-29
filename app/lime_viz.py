@@ -8,6 +8,7 @@ import os
 from pathlib import Path
 import time
 from sklearn.ensemble import RandomForestClassifier
+import profile
 def get_lime_vis():
     
 
@@ -34,6 +35,7 @@ def get_lime_vis():
     print("Explainer Creation:",end - start)
     start = time.time()
     i = np.random.randint(0, test.shape[0])
+    profile.run('explainer.explain_instance(test[i], rf.predict_proba, num_features=4, top_labels=1)')
     exp = explainer.explain_instance(test[i], rf.predict_proba, num_features=4, top_labels=1)
     end = time.time()
     print("Explain instance:",end - start)
