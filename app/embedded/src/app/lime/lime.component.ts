@@ -27,10 +27,10 @@ export class LimeComponent implements OnInit {
         datasets: [{
             label: 'My First dataset',
             backgroundColor: Object.values(features).map((n:number) => {
-              if(n >0)return "blue"
-              else return "red"
+              if(n >0)return "#6391db"
+              else return "#f27146"
             }),
-            borderColor: 'rgb(255, 99, 132)',
+            borderColor: 'black',
             data: Object.values(features)
         }]
       },
@@ -42,20 +42,48 @@ export class LimeComponent implements OnInit {
           display: false
         },
         scales: {
-          xAxes : [{
-            ticks : {
-            max : maximum,    
-            min : - (Math.abs(minimum) + maximum)/3 ,
-            autoSkip:true
+          xAxes : [
+            {
+              ticks : 
+              {
+                max : maximum,    
+                min : -maximum,// (Math.abs(minimum) + maximum)/3 ,
+                autoSkip:true
+              }
+              ,gridLines: 
+              {
+                display: true,
+                lineWidth: .5,
+                zeroLineColor:'black',
+                zeroLineWidth:3
+              }
+            }
+          ],
+          yAxes : [
+            {
+              display:false
+            }
+          ]
+      },
+        animation: {
+          onComplete: function () {
+            var ctx = (<any>this).chart.ctx;
+            ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontFamily, 'normal', Chart.defaults.global.defaultFontFamily);
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'bottom';
 
-          },gridLines: {
-            display: true,
-            lineWidth: 0,
-            zeroLineColor:'black',
-            zeroLineWidth:3
+            (<any>this).data.datasets.forEach(function (dataset:any) {
+              for (var i = 0; i < dataset.data.length; i++) {
+                var model = dataset._meta[Object.keys(dataset._meta)[0]].data[i]._model,
+                    left = dataset._meta[Object.keys(dataset._meta)[0]].data[i]._xScale.left;
+                ctx.fillStyle = '#444'; // label color
+                var label = model.label;
+                ctx.fillText(label, left + 15, model.y + 8);
+              }
+            });               
           }
-        }]
         }
+        
       }
     });
     console.log(this.chart);
