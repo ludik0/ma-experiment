@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Chart } from 'chart.js';
 import { bindCallback } from 'rxjs';
 
@@ -11,15 +12,44 @@ import { bindCallback } from 'rxjs';
 export class LimeComponent implements OnInit {
 
   public chart:Chart | undefined;
-  
+  public formGroup = new FormGroup({
+    sl: new FormControl('', [
+        Validators.required,
+    ]),
+    sw: new FormControl('', [
+      Validators.required,
+    ]),
+    pl: new FormControl('', [
+      Validators.required,
+    ]),
+    pw: new FormControl('', [
+      Validators.required,
+    ]),
+  });
+
   constructor(private http:HttpClient) { }
   async ngOnInit()  {
     let features = await this.http.get("../lime").toPromise();
     console.log(features);
+    this.showExpanation(features);
+    
+    console.log(this.chart);
+    let featuresValues = await this.http.get<any>("../lime/sample").toPromise();
+    this.formGroup.controls["sl"].patchValue(featuresValues["sepal length (cm)"]);
+    this.formGroup.controls["sw"].patchValue(featuresValues["sepal width (cm)"]);
+    this.formGroup.controls["pl"].patchValue(featuresValues["petal length (cm)"]);
+    this.formGroup.controls["pw"].patchValue(featuresValues["petal width (cm)"]);
+  }
+  public submit():void{
+    console.log(this.formGroup.value)
+    this.http.post<any>("../lime",this.formGroup.value).subscribe(newExplanation =>{
+      this.showExpanation(newExplanation);
+    });
+  }
+  showExpanation(features:any):void{
     let maximum = Object.values(features).map((n:number) => Math.abs(n)).reduce((a,b)=>Math.max(a,b));
     let minimum = Object.values(features).reduce((a,b)=>Math.min(a,b));
     maximum = maximum + maximum/10;
-    console.log(maximum)
     this.chart = new Chart('canvas', {
       type: 'horizontalBar',
       data: {
@@ -86,65 +116,5 @@ export class LimeComponent implements OnInit {
         
       }
     });
-    console.log(this.chart);
   }
-
-/*async ngOnInit()  {
-  let features = await this.http.get("../lime").toPromise();
-  console.log(features);
-  let maximum = Object.values(features).map((n:number) => Math.abs(n)).reduce((a,b)=>Math.max(a,b));
-  console.log(maximum)
-  this.data = Object.entries(features).map((k:any,v:any) => {return {name:k,value:v}});
-  console.log(this.data);
-}
-  public data:any[] = [];
-  // options
-  public showXAxis: boolean = true;
-  public  showYAxis: boolean = true;
-  public  gradient: boolean = false;
-  public  showLegend: boolean = true;
-  public  showXAxisLabel: boolean = true;
-  public yAxisLabel: string = 'Feature';
-  public showYAxisLabel: boolean = true;
-  public xAxisLabel: string = 'Importance';
-
-  public colorScheme = {
-    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
-  };
-
-  constructor(private http:HttpClient) {
-    
-  }*/
-
-  /*ngOnInit(): void {
-    console.log(document.getElementById("lime-container")?.getBoundingClientRect());
-    this.chart = new Chart('canvas', {
-      type: 'horizontalBar',
-      data: {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-        datasets: [{
-            label: 'My First dataset',
-            backgroundColor: 'rgb(255, 99, 132)',
-            borderColor: 'rgb(255, 99, 132)',
-            data: [-10, 10, -5, 2, 20, 30, 45]
-        }]
-      },
-      options: {
-        maintainAspectRatio: false,
-        responsive:true,
-        legend: {
-          display: false
-        },
-        scales: {
-          xAxes: [{
-            display: true
-          }],
-          yAxes: [{
-            display: true
-          }],
-        }
-      }
-    });
-  }*/
-
 }
