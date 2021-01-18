@@ -47,8 +47,8 @@ export class LimeComponent implements OnInit {
     });
   }
   showExpanation(features:any):void{
-    let maximum = Object.values(features).map((n:number) => Math.abs(n)).reduce((a,b)=>Math.max(a,b));
-    let minimum = Object.values(features).reduce((a,b)=>Math.min(a,b));
+    let maximum = Object.values(features).map((n:any) => Math.abs(n)).reduce((a,b)=>Math.max(a,b));
+    let minimum = Object.values(features).reduce((a:any,b:any)=>Math.min(a,b));
     maximum = maximum + maximum/10;
     this.chart = new Chart('canvas', {
       type: 'horizontalBar',
@@ -56,12 +56,12 @@ export class LimeComponent implements OnInit {
         labels: Object.keys(features),
         datasets: [{
             label: 'My First dataset',
-            backgroundColor: Object.values(features).map((n:number) => {
+            backgroundColor: Object.values(features).map((n:any) => {
               if(n >0)return "#6391db"
               else return "#f27146"
             }),
             borderColor: 'black',
-            data: Object.values(features)
+            data: <any>Object.values(features)
         }]
       },
       options: {

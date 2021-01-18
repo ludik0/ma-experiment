@@ -1,0 +1,63 @@
+.fs-container{
+    display: flex;
+    flex-direction: row;
+}
+.feature_selection{
+    border-radius: 10px;
+    width: 300px;
+    height: 25px;
+    color:white;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 6px;
+}
+.feature_selection-active{
+    background-color: green; 
+}
+.feature_selection-disabled{
+    background-color: grey;
+}
+.loading{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: rgba(0,0,0,0.8);
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+}
+.loading-info{
+    color: white;
+    /*background-color: rgba(0,0,0,0.6);*/
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    user-select: none;
+}
+.mat-progress-spinner::ng-deep circle, .mat-spinner::ng-deep circle {
+    stroke: white!important;
+}
+.result {
+    /* Add shadows to create the "card" effect */
+    margin-left: 100px;
+}
+.result-box {
+    transition: all 1.2s;
+    animation: blinkingText 1.2s infinite;
+    animation-fill-mode: forwards;
+}
+@keyframes blinkingText{
+    0%{     background-color: rgba(0,128,0,0.1);   }
+    49%{    background-color: rgba(0,128,0,0.3); }
+    60%{    background-color: rgba(0,128,0,0.5); }
+    99%{    background-color: green;  }
+    100%{   background-color: white;    }
+}

@@ -5,18 +5,24 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LimeComponent } from './lime/lime.component';
 import { RuleComponent } from './rule/rule.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatCardModule } from '@angular/material/card';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FeatureSelectionComponent } from './feature-selection/feature-selection.component';
+import { CommonModule } from '@angular/common';
+import { IdHttpInterceptor } from './idInterceptor';
 
 @NgModule({
   declarations: [
     AppComponent,
     LimeComponent,
-    RuleComponent
+    RuleComponent,
+    FeatureSelectionComponent
   ],
   imports: [
     BrowserModule,
@@ -27,9 +33,18 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     //materials
     MatSelectModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    MatProgressSpinnerModule,
+    MatCardModule,
+    CommonModule      
   ],
-  providers: [],
+  providers: [
+    {
+       provide: HTTP_INTERCEPTORS,
+       useClass: IdHttpInterceptor,
+       multi: true
+     }  
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

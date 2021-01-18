@@ -1,0 +1,19 @@
+<div class="fs-container" style="height:400px">
+    <div>
+        <h3>Liste der verwendeten Eigenschaften:</h3>
+        <p *ngFor="let f of features" (click)="toggleFeature(f)" class="feature_selection" [ngClass]="{'feature_selection-active':f.active === true,'feature_selection-disabled':f.active === false}">{{f.name}}</p>
+        <button mat-raised-button color="basic" type="submit" (click)="updateResult()">Entscheidung neu berechnen</button>
+    </div>
+    <div class="result" style="margin-top: 100px; width: 300px;">
+        <b>Die Entscheidung des Algorithmuses ist:</b> <br/>
+        <i id="result-box" style="font-size: 18px;">{{result}}</i>
+    </div>
+</div>
+<div class="loading" [ngStyle]="{'display': isloading === true ?'block':'none'}">
+    <div class="loading-info"> 
+    <h3> Bitte warten! </h3>
+    <h3> Die Entscheidung des Algorithmus wird neu berechnet </h3>
+    <br>
+    <mat-spinner></mat-spinner>
+    </div> 
+</div>
