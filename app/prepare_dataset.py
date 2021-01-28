@@ -1,104 +1,7 @@
 from .util import *
 
-
-def prepare_german_dataset(filename, path_data):
-
-    # Read Dataset
-    df = pd.read_csv(path_data + filename, delimiter=',')
-
-    # Features Categorization
-    columns = df.columns
-    class_name = 'default'
-    possible_outcomes = list(df[class_name].unique())
-
-    type_features, features_type = recognize_features_type(df, class_name)
-
-    discrete = ['installment_as_income_perc', 'present_res_since', 'credits_this_bank', 'people_under_maintenance']
-    discrete, continuous = set_discrete_continuous(columns, type_features, class_name, discrete, continuous=None)
-
-    columns_tmp = list(columns)
-    columns_tmp.remove(class_name)
-    idx_features = {i: col for i, col in enumerate(columns_tmp)}
-
-    # Dataset Preparation for Scikit Alorithms
-    df_le, label_encoder = label_encode(df, discrete)
-    X = df_le.loc[:, df_le.columns != class_name].values
-    y = df_le[class_name].values
-
-    dataset = {
-        'name': filename.replace('.csv', ''),
-        'df': df,
-        'columns': list(columns),
-        'class_name': class_name,
-        'possible_outcomes': possible_outcomes,
-        'type_features': type_features,
-        'features_type': features_type,
-        'discrete': discrete,
-        'continuous': continuous,
-        'idx_features': idx_features,
-        'label_encoder': label_encoder,
-        'X': X,
-        'y': y,
-    }
-
-    return dataset
-
-
-def prepare_adult_dataset(filename, path_data):
-
-    # Read Dataset
-    df = pd.read_csv(path_data + filename, delimiter=',', skipinitialspace=True)
-
-    # Remove useless columns
-    del df['fnlwgt']
-    del df['education-num']
-
-    # Remove Missing Values
-    for col in df.columns:
-        if '?' in df[col].unique():
-            df[col][df[col] == '?'] = df[col].value_counts().index[0]
-
-    # Features Categorization
-    columns = df.columns.tolist()
-    columns = columns[-1:] + columns[:-1]
-    df = df[columns]
-    class_name = 'class'
-    possible_outcomes = list(df[class_name].unique())
-
-    type_features, features_type = recognize_features_type(df, class_name)
-
-    discrete, continuous = set_discrete_continuous(columns, type_features, class_name, discrete=None, continuous=None)
-
-    columns_tmp = list(columns)
-    columns_tmp.remove(class_name)
-    idx_features = {i: col for i, col in enumerate(columns_tmp)}
-
-    # Dataset Preparation for Scikit Alorithms
-    df_le, label_encoder = label_encode(df, discrete)
-    X = df_le.loc[:, df_le.columns != class_name].values
-    y = df_le[class_name].values
-
-    dataset = {
-        'name': filename.replace('.csv', ''),
-        'df': df,
-        'columns': list(columns),
-        'class_name': class_name,
-        'possible_outcomes': possible_outcomes,
-        'type_features': type_features,
-        'features_type': features_type,
-        'discrete': discrete,
-        'continuous': continuous,
-        'idx_features': idx_features,
-        'label_encoder': label_encoder,
-        'X': X,
-        'y': y,
-    }
-
-    return dataset
-
-
 def prepare_compass_dataset(filename, path_data, columns = ['age', 'age_cat', 'sex', 'race',  'priors_count', 'days_b_screening_arrest', 'c_jail_in', 'c_jail_out',
-               'c_charge_degree', 'is_recid', 'is_violent_recid', 'two_year_recid', 'decile_score', 'score_text']):
+               'c_charge_degree', 'is_recid', 'is_violent_recid', 'two_year_recid', 'decile_score', 'score_text', 'id'], user_data={},user_index=0):
 
     # Read Dataset
     lengthOfStayIncluded = False
@@ -106,8 +9,17 @@ def prepare_compass_dataset(filename, path_data, columns = ['age', 'age_cat', 's
         lengthOfStayIncluded = True
         columns.remove('length_of_stay')
     df = pd.read_csv(path_data + filename, delimiter=',', skipinitialspace=True)
-    print(columns)
-    
+    if len(user_data)>0 and user_index!=0:
+        print("Before")
+        #[  24    3    1    0   10    0    0    1    1    1 8821]
+        #[  24    3    1    0   10    0    0    1    1    1 8821]
+        print(df[df['id'] == user_index])
+        for key, value in user_data.items():
+            
+            index = df[df['id'] == user_index].index[0]
+            df.set_value(index, key, value)
+        print("After")
+        print(df[df['id'] == user_index])
 
     df = df[columns]
 
@@ -126,8 +38,10 @@ def prepare_compass_dataset(filename, path_data, columns = ['age', 'age_cat', 's
         df['days_b_screening_arrest'] = df['days_b_screening_arrest'].astype(int)
 
     def get_class(x):
+        if x < 5:
+            return 'Low'
         if x < 7:
-            return 'Medium-Low'
+            return 'Medium'
         else:
             return 'High'
     df['class'] = df['decile_score'].apply(get_class)

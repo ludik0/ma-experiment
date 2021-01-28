@@ -17,10 +17,10 @@ import time
 from sklearn.ensemble import RandomForestClassifier
 import profile
 
-class FeatureSelection:
+class ValueSelection:
    
     def __init__(self):
-        self.testRecordIndex = 19
+        self.testRecordIndex = 13
         start = time.time()
         dataset_name = 'compas-scores-two-years.csv'
         path_data = './app/datasets/'
@@ -32,23 +32,19 @@ class FeatureSelection:
 
         end = time.time()
         print("TOOK: "+str(end - start))
-    def calculateNewResult(self,columnslist):
+    def calculateNewResult(self,user_data):
         dataset_name = 'compas-scores-two-years.csv'
         path_data = './app/datasets/'
-        print(columnslist)
-        newColumns = columnslist + ['decile_score', 'score_text','c_jail_in', 'c_jail_out', 'id']
-        print(newColumns)
-        dataset = prepare_compass_dataset(dataset_name, path_data, columns=newColumns)
+        print(user_data)
+        dataset = prepare_compass_dataset(dataset_name, path_data,user_data=user_data,user_index=8813)
         X, y = dataset['X'], dataset['y']
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0,shuffle=False)
-        print(X_train)
-        print(dataset["df"].head(self.testRecordIndex))
         blackbox = RandomForestClassifier(n_estimators=20)
         blackbox.fit(X_train, y_train)
+        print("DATA")
         print(str(X_test[self.testRecordIndex]))
+        print(str(X_test))
         result = blackbox.predict([X_test[self.testRecordIndex]])[0]
         print(dataset["possible_outcomes"])
         print("Result:" + str(result))
         return {"result":dataset["possible_outcomes"][result]}
-    def getFeatureList(self):
-        return self.dataset["idx_features"]

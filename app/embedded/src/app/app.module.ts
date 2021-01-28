@@ -16,13 +16,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FeatureSelectionComponent } from './feature-selection/feature-selection.component';
 import { CommonModule } from '@angular/common';
 import { IdHttpInterceptor } from './idInterceptor';
+import { ValueSelectionComponent } from './value-selection/value-selection.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LimeComponent,
     RuleComponent,
-    FeatureSelectionComponent
+    FeatureSelectionComponent,
+    ValueSelectionComponent
   ],
   imports: [
     BrowserModule,

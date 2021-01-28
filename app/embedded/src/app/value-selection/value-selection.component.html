@@ -1,0 +1,60 @@
+<div style="height: 450px">
+    <form [formGroup]="formGroup" (ngSubmit)="submit()">
+    <div style="height: inherit">
+        <h3>Liste der verwendeten Eigenschaften:</h3>
+        <div class="fs-container" style="height:300px; width: 300px;">
+                <mat-form-field appearance="fill">
+                    <mat-label>{{features['sex'].name}}</mat-label>
+                    <mat-select formControlName="sex">
+                      <mat-option *ngFor="let item of features['sex'].mapping| keyvalue" [value]="item.value">
+                        {{item.key}}
+                      </mat-option>
+                    </mat-select>
+                </mat-form-field> 
+                <mat-form-field appearance="fill">
+                    <mat-label>{{features['race'].name}}</mat-label>
+                    <mat-select formControlName="race">
+                      <mat-option *ngFor="let item of features['race'].mapping| keyvalue" [value]="item.value">
+                        {{item.key}}
+                      </mat-option>
+                    </mat-select>
+                </mat-form-field> 
+                <mat-form-field appearance="fill">
+                    <mat-label>{{features['is_recid'].name}}</mat-label>
+                    <mat-select formControlName="is_recid" [value]="features['is_recid'].default">
+                      <mat-option *ngFor="let item of features['is_recid'].mapping| keyvalue" [value]="item.value">
+                        {{item.key}}
+                      </mat-option>
+                    </mat-select>
+                </mat-form-field> 
+                <mat-form-field appearance="fill">
+                    <mat-label>{{features['age_cat'].name}}</mat-label>
+                    <mat-select formControlName="age_cat">
+                      <mat-option *ngFor="let item of features['age_cat'].mapping| keyvalue" [value]="item.value">
+                        {{item.key}}
+                      </mat-option>
+                    </mat-select>
+                </mat-form-field>    
+
+            
+        </div>
+        
+    </div>
+    <div class="result" style="width: 300px;">
+        <!--(click)="updateResult()" -->
+        <button mat-raised-button class="refresh" color="accent" type="submit" type="submit" [disabled]="!formGroup.valid">Entscheidung neu berechnen</button>
+        <div style="height: 50px;">
+            <b>Die Entscheidung des Algorithmus ist:</b> <br/>
+            <i id="result-box" style="font-size: 18px;">{{result}}</i>
+        </div>
+    </div>
+    </form>
+</div>
+<div class="loading" [ngStyle]="{'display': isloading === true ?'block':'none'}">
+    <div class="loading-info"> 
+    <h3> Bitte warten! </h3>
+    <h3> Die Entscheidung des Algorithmus wird neu berechnet </h3>
+    <br>
+    <mat-spinner></mat-spinner>
+    </div> 
+</div>

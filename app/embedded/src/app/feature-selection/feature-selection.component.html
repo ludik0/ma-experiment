@@ -1,12 +1,17 @@
-<div class="fs-container" style="height:400px">
-    <div>
+<div style="height: 450px">
+    <div style="height: inherit">
         <h3>Liste der verwendeten Eigenschaften:</h3>
-        <p *ngFor="let f of features" (click)="toggleFeature(f)" class="feature_selection" [ngClass]="{'feature_selection-active':f.active === true,'feature_selection-disabled':f.active === false}">{{f.name}}</p>
-        <button mat-raised-button color="basic" type="submit" (click)="updateResult()">Entscheidung neu berechnen</button>
+        <div class="fs-container" style="height:250px; width: 300px;">
+            <div *ngFor="let f of features" (click)="toggleFeature(f)" class="feature_selection" [ngClass]="{'feature_selection-active':f.active === true,'feature_selection-disabled':f.active === false}">{{f.name}}</div>
+        </div>
+        
     </div>
-    <div class="result" style="margin-top: 100px; width: 300px;">
-        <b>Die Entscheidung des Algorithmuses ist:</b> <br/>
-        <i id="result-box" style="font-size: 18px;">{{result}}</i>
+    <div class="result" style="width: 300px;">
+        <button mat-raised-button class="refresh" color="accent" type="submit" (click)="updateResult()">Entscheidung neu berechnen</button>
+        <div style="height: 50px;">
+            <b>Die Entscheidung des Algorithmus ist:</b> <br/>
+            <i id="result-box" style="font-size: 18px;">{{result}}</i>
+        </div>
     </div>
 </div>
 <div class="loading" [ngStyle]="{'display': isloading === true ?'block':'none'}">

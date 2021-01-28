@@ -8,12 +8,15 @@ from fastapi.responses import FileResponse,Response
 from .rule import show_rule_vis
 from .lime_viz import LimeViz
 from .feature_selection import FeatureSelection
+from .value_selection import ValueSelection
+
 import uuid
 import logging
 logging.basicConfig(format='%(asctime)s %(message)s',filename='participants_access.log', level=logging.INFO)
 
 limeviz = LimeViz()
 fs = FeatureSelection()
+vs = ValueSelection()
 app = FastAPI()
 
 app.mount("/embedded", StaticFiles(directory="app/embedded/dist/embedded",html =True), name="embedded")
@@ -39,6 +42,21 @@ async def read_root(request: Request):
     #list(map(lambda x: x.internalName, body))
     print(str(newFeatures))
     return fs.calculateNewResult(newFeatures)
+
+@app.post("/vs")
+async def read_root(request: Request):
+    body = await request.json()
+    logging.info(",reqId:"+str(request.state.requestId)+","+str(request.query_params)+",url="+str(request.url)+",body="+str(body)) 
+    print("hello")
+    
+    print(body)
+    #newFeatures = []
+    #for ele in body:
+    #    newFeatures.append(ele["internalName"])
+    #list(map(lambda x: x.internalName, body))
+    #print(str(newFeatures))
+    body=dict(body)
+    return vs.calculateNewResult(body)
 @app.get("/fs/feature_list")
 def read_root():
     return fs.getFeatureList()
