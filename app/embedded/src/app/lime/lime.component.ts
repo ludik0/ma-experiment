@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Chart } from 'chart.js';
-import { bindCallback } from 'rxjs';
 
 @Component({
   selector: 'app-lime',
@@ -12,7 +11,7 @@ import { bindCallback } from 'rxjs';
 export class LimeComponent implements OnInit {
 
   public chart:Chart | undefined;
-  public formGroup = new FormGroup({
+  /*public formGroup = new FormGroup({
     sl: new FormControl('', [
         Validators.required,
     ]),
@@ -25,27 +24,42 @@ export class LimeComponent implements OnInit {
     pw: new FormControl('', [
       Validators.required,
     ]),
-  });
-
+  });*/
+  private translations:any = {
+    "age":"Alter",
+    "priors_count":"Bisherige Straftaten",
+    "two_year_recid":"Rückfall in den letzen 2 Jahren",
+    "race":"Ethnische Herkunft"
+  }
   constructor(private http:HttpClient) { }
   async ngOnInit()  {
     let features = await this.http.get("../lime").toPromise();
     console.log(features);
-    this.showExpanation(features);
+    let translated_features:any = {};
+    Object.entries(features).forEach((entry:any) => {
+      for(let [k,val] of Object.entries(this.translations)){
+        if(entry[0].indexOf(k)>=0){
+          var newkey = entry[0].replace(k,val);
+          translated_features[newkey] = entry[1]
+        }
+      }
+      //translated_features[entry[0]] = v;
+    })
+    this.showExpanation(translated_features);
     
     console.log(this.chart);
-    let featuresValues = await this.http.get<any>("../lime/sample").toPromise();
-    this.formGroup.controls["sl"].patchValue(featuresValues["sepal length (cm)"]);
+    //let featuresValues = await this.http.get<any>("../lime/sample").toPromise();
+    /*this.formGroup.controls["sl"].patchValue(featuresValues["sepal length (cm)"]);
     this.formGroup.controls["sw"].patchValue(featuresValues["sepal width (cm)"]);
     this.formGroup.controls["pl"].patchValue(featuresValues["petal length (cm)"]);
-    this.formGroup.controls["pw"].patchValue(featuresValues["petal width (cm)"]);
+    this.formGroup.controls["pw"].patchValue(featuresValues["petal width (cm)"]);*/
   }
-  public submit():void{
+  /*public submit():void{
     console.log(this.formGroup.value)
     this.http.post<any>("../lime",this.formGroup.value).subscribe(newExplanation =>{
       this.showExpanation(newExplanation);
     });
-  }
+  }*/
   showExpanation(features:any):void{
     let maximum = Object.values(features).map((n:any) => Math.abs(n)).reduce((a,b)=>Math.max(a,b));
     let minimum = Object.values(features).reduce((a:any,b:any)=>Math.min(a,b));
