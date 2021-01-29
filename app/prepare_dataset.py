@@ -15,9 +15,9 @@ def prepare_compass_dataset(filename, path_data, columns = ['age', 'age_cat', 's
         #[  24    3    1    0   10    0    0    1    1    1 8821]
         print(df[df['id'] == user_index])
         for key, value in user_data.items():
-            
             index = df[df['id'] == user_index].index[0]
-            df.set_value(index, key, value)
+            #df.set_value(index, key, value)
+            df.at[index, key]=value
         print("After")
         print(df[df['id'] == user_index])
 
