@@ -17,6 +17,7 @@
     justify-content: center;
     margin-bottom: 6px;
     margin-left: 6px;
+    user-select: none;
 }
 .feature_selection-active{
     background-color: green; 
